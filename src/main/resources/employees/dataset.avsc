@@ -1,0 +1,17 @@
+{
+  "type" : "record",
+  "name" : "topLevelRecord",
+  "fields" : [ {
+    "name" : "id",
+    "type" : "long"
+  }, {
+    "name" : "name",
+    "type" : [ "string", "null" ]
+  }, {
+    "name" : "surname",
+    "type" : [ "string", "null" ]
+  }, {
+    "name" : "age",
+    "type" : "int"
+  } ]
+}
