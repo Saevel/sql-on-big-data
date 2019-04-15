@@ -25,16 +25,16 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
     
     Access Hue on via "localhost:8888" and log in with the cloudera / cloudera credentials. 
 
-1. Take the Avro data from the "src/resources/employees" folder and use Hue to place it in a chosen directory on HDFS. Then
+1. Take the Avro data from the "src/main/resources/employees" folder and use Hue to place it in a chosen directory on HDFS. Then
    create a new table called "EMPLOYEES" in Hive / Impala through Hue with the following fields:
     * id (BIGINT)
-    * name (TEXT)
-    * surname (TEXT)
+    * name (STRING)
+    * surname (STRING)
     * age (INT)
     
    bucketed into 16 buckets using the "age" field.
     
-   Use the "LOAD INPATH" command to load data from the HDFS path of your choice to this table. 
+   Use the "LOAD DATA INPATH" command to load data from the HDFS path of your choice to this table. 
    
    In Hue, write a query, that will use the EMPLOYEES table to check for 10 youngest employees in the whole company and
    display the results in Hue query editor.
