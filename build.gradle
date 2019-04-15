@@ -1,0 +1,26 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'prv.saevel'
+
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven { url "http://repo.spring.io/plugins-release/" }
+}
+
+dependencies {
+
+    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.8.1'
+
+    providedCompile 'org.apache.hive:hive-exec:1.1.0'
+    providedCompile 'org.apache.hadoop:hadoop-client:2.6.0'
+
+    testImplementation('org.junit.jupiter:junit-jupiter:5.4.2')
+}
