@@ -3,7 +3,7 @@ SQL on Big Data
 Welcome the the "SQL on Big Data" course exercises. We will put the theoretical part of the training to practice and
 make sure we know how to process massive datasets on Hadoop platforms using the SQL language.
 
-1. Preparation
+0. Preparation
 
     Pull the latest version of Cloudera Quickstart Docker Image by calling: "docker pull cloudera/quickstart:lastest"
     
