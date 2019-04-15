@@ -3,9 +3,7 @@ package prv.saevel.bigdata.sql.udaf;
 import org.apache.hadoop.hive.ql.exec.UDAF;
 import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 public class UniqueIdUDAF extends UDAF {
 
@@ -19,7 +17,6 @@ public class UniqueIdUDAF extends UDAF {
             }
 
             boolean isUnique;
-
 
             Set<Long> values;
 
@@ -50,7 +47,7 @@ public class UniqueIdUDAF extends UDAF {
          */
         @Override
         public void init() {
-
+            this.state = new State(true, new HashSet<>());
         }
 
         /**
@@ -59,6 +56,9 @@ public class UniqueIdUDAF extends UDAF {
          */
 
         public boolean iterate(long value){
+            if(this.state.values.contains(value)){
+                this.state.isUnique = false;
+            }
             return true;
         }
 
@@ -68,7 +68,7 @@ public class UniqueIdUDAF extends UDAF {
          * returns partially aggregated results.
          */
         public State terminatePartial(){
-            return null;
+            return this.state;
         }
 
         /**
@@ -76,6 +76,15 @@ public class UniqueIdUDAF extends UDAF {
          * This function is called two merge two partially aggregated resultsn
          */
         public boolean merge(State another){
+            if(this.state.isUnique && another.isUnique) {
+                if(containsAny(this.state.values, another.values) || containsAny(another.values, this.state.values)){
+                    this.state.isUnique = false;
+                } else {
+                    this.state.values.addAll(another.values);
+                }
+            } else {
+                this.state.isUnique = false;
+            }
             return true;
         }
 
@@ -84,7 +93,15 @@ public class UniqueIdUDAF extends UDAF {
          * this function is called after the last record of the group has been streamed
          */
         public boolean terminate(){
-            return false;
+            return this.state.isUnique;
+        }
+
+        private<T> boolean containsAny(Collection<T> c1, Collection<T> c2){
+            boolean result = false;
+            for(T t : c2){
+                result = result || c1.contains(t);
+            }
+            return result;
         }
     }
 }

@@ -77,3 +77,6 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
    and store their: employeeId, name, surname, department, country, salary and years of experience in the "TOP_BOTH" 
    table, stored as ORC files and partitioned by department and country, where k is equal to the value passed in the 
    "top-both" input parameter.
+   
+   
+   NOTE: The results of each exercise can be found in the src/main/resources/results, in appropriate JSON files.
