@@ -1,12 +1,11 @@
 package prv.saevel.bigdata.sql.udaf;
 
-import com.google.common.collect.Lists;
 import org.apache.hadoop.hive.ql.exec.UDAF;
 import org.apache.hadoop.hive.ql.exec.UDAFEvaluator;
-import org.apache.hadoop.hive.ql.metadata.HiveException;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class UniqueIdUDAF extends UDAF {
 
@@ -14,14 +13,15 @@ public class UniqueIdUDAF extends UDAF {
 
         public static class State {
 
-            public State(boolean isUnique, List<Long> values) {
+            public State(boolean isUnique, Set<Long> values) {
                 this.isUnique = isUnique;
                 this.values = values;
             }
 
             boolean isUnique;
 
-            List<Long> values;
+
+            Set<Long> values;
 
             @Override
             public boolean equals(Object o) {

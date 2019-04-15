@@ -7,9 +7,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -39,7 +37,7 @@ public class UniqueIdUDAFTest {
         UniqueIdUDAF.UniqueIdUDAFEvaluator udaf = new UniqueIdUDAF.UniqueIdUDAFEvaluator();
         udaf.init();
         final Random randomizer = new Random();
-        return Stream.generate(randomValueLists(randomizer))
+        return Stream.generate(randomValueSets(randomizer))
                 .map(toNegativeValueListCase(randomizer, udaf))
                 .limit(20)
                 .collect(Collectors.toList());
@@ -51,7 +49,7 @@ public class UniqueIdUDAFTest {
         UniqueIdUDAF.UniqueIdUDAFEvaluator udaf = new UniqueIdUDAF.UniqueIdUDAFEvaluator();
         udaf.init();
         final Random randomizer = new Random();
-        return Stream.generate(randomValueLists(randomizer))
+        return Stream.generate(randomValueSets(randomizer))
                 .map(toPositiveValueListCase(randomizer, udaf))
                 .limit(20)
                 .collect(Collectors.toList());
@@ -62,7 +60,7 @@ public class UniqueIdUDAFTest {
         UniqueIdUDAF.UniqueIdUDAFEvaluator udaf = new UniqueIdUDAF.UniqueIdUDAFEvaluator();
         udaf.init();
         final Random randomizer = new Random();
-        return Stream.generate(randomValueLists(randomizer))
+        return Stream.generate(randomValueSets(randomizer))
                 .map(toTerminateParialCase(randomizer, udaf))
                 .limit(20)
                 .collect(Collectors.toList());
@@ -73,7 +71,7 @@ public class UniqueIdUDAFTest {
         UniqueIdUDAF.UniqueIdUDAFEvaluator udaf = new UniqueIdUDAF.UniqueIdUDAFEvaluator();
         udaf.init();
         final Random randomizer = new Random();
-        return Stream.generate(randomValueLists(randomizer))
+        return Stream.generate(randomValueSets(randomizer))
                 .map(toMergeWithNonUniqueState(randomizer, udaf))
                 .limit(20)
                 .collect(Collectors.toList());
@@ -84,7 +82,7 @@ public class UniqueIdUDAFTest {
         UniqueIdUDAF.UniqueIdUDAFEvaluator udaf = new UniqueIdUDAF.UniqueIdUDAFEvaluator();
         udaf.init();
         final Random randomizer = new Random();
-        return Stream.generate(randomValueLists(randomizer))
+        return Stream.generate(randomValueSets(randomizer))
                 .map(toMergeWithStateWithOverlappingValues(randomizer, udaf))
                 .limit(20)
                 .collect(Collectors.toList());
@@ -95,17 +93,17 @@ public class UniqueIdUDAFTest {
         UniqueIdUDAF.UniqueIdUDAFEvaluator udaf = new UniqueIdUDAF.UniqueIdUDAFEvaluator();
         udaf.init();
         final Random randomizer = new Random();
-        return Stream.generate(randomValueLists(randomizer))
+        return Stream.generate(randomValueSets(randomizer))
                 .map(toTerminateFinalCase(randomizer, udaf))
                 .limit(20)
                 .collect(Collectors.toList());
     }
 
-    private Function<List<Long>, DynamicTest> toMergeWithNonUniqueState(final Random randomizer,
+    private Function<Set<Long>, DynamicTest> toMergeWithNonUniqueState(final Random randomizer,
                                                                         final UniqueIdUDAF.UniqueIdUDAFEvaluator udaf){
        return values -> {
            final boolean initialUniqueness = randomizer.nextBoolean();
-           final List<Long> otherValues = randomValueLists(randomizer).get();
+           final Set<Long> otherValues = randomValueSets(randomizer).get();
            return dynamicTest(
                    "For the initial uniqueness: " + initialUniqueness + " and any values non the list," +
                            " merging with an already non-unique partial should result in uniqueness of: false",
@@ -121,12 +119,15 @@ public class UniqueIdUDAFTest {
        };
     }
 
-    private Function<List<Long>, DynamicTest> toMergeWithStateWithOverlappingValues(final Random randomizer,
+    private Function<Set<Long>, DynamicTest> toMergeWithStateWithOverlappingValues(final Random randomizer,
                                                                                     final UniqueIdUDAF.UniqueIdUDAFEvaluator udaf){
         return values -> {
             final boolean initialUniqueness = randomizer.nextBoolean();
             final boolean secondUniqueness = randomizer.nextBoolean();
-            final List<Long> otherValues = Arrays.asList(values.get(randomizer.nextInt(values.size())));
+            final List<Long> intermediary = new LinkedList<>();
+            intermediary.addAll(values);
+            final Set<Long> otherValues = new HashSet<>();
+            otherValues.add(intermediary.get(randomizer.nextInt(values.size())));
             return dynamicTest(
                     "For any initial(" + initialUniqueness + ") and merged (" + secondUniqueness +
                             ") uniqueness, if the values on the two lists overlap(" + otherValues + "), the result " +
@@ -143,7 +144,7 @@ public class UniqueIdUDAFTest {
         };
     }
 
-    private Function<List<Long>, DynamicTest> toTerminateParialCase(final Random randomizer,
+    private Function<Set<Long>, DynamicTest> toTerminateParialCase(final Random randomizer,
                                                                     final UniqueIdUDAF.UniqueIdUDAFEvaluator udaf){
         return values -> {
             final boolean uniqueness = randomizer.nextBoolean();
@@ -159,7 +160,7 @@ public class UniqueIdUDAFTest {
         };
     }
 
-    private Function<List<Long>, DynamicTest> toTerminateFinalCase(final Random randomizer,
+    private Function<Set<Long>, DynamicTest> toTerminateFinalCase(final Random randomizer,
                                                                     final UniqueIdUDAF.UniqueIdUDAFEvaluator udaf){
         return values -> {
             final boolean uniqueness = randomizer.nextBoolean();
@@ -174,7 +175,7 @@ public class UniqueIdUDAFTest {
         };
     }
 
-    private Function<List<Long>, DynamicTest> toPositiveValueListCase(final Random randomizer,
+    private Function<Set<Long>, DynamicTest> toPositiveValueListCase(final Random randomizer,
                                                                      final UniqueIdUDAF.UniqueIdUDAFEvaluator udaf){
         return values -> {
             final Long chosenValue = generateAbsent(values, randomizer);
@@ -192,7 +193,7 @@ public class UniqueIdUDAFTest {
         };
     }
 
-    private long generateAbsent(final List<Long> values, final Random randomizer) {
+    private long generateAbsent(final Set<Long> values, final Random randomizer) {
         long generated = randomizer.nextLong();
         if(values.contains(generated)){
             return generateAbsent(values, randomizer);
@@ -201,10 +202,12 @@ public class UniqueIdUDAFTest {
         }
     }
 
-    private Function<List<Long>, DynamicTest> toNegativeValueListCase(final Random randomizer,
+    private Function<Set<Long>, DynamicTest> toNegativeValueListCase(final Random randomizer,
                                                                       final UniqueIdUDAF.UniqueIdUDAFEvaluator udaf){
         return values -> {
-            final Long chosenValue = values.get(randomizer.nextInt(values.size()));
+            final List<Long> intermediary = new LinkedList<>();
+            intermediary.addAll(values);
+            final Long chosenValue = intermediary.get(randomizer.nextInt(values.size()));
             return dynamicTest(
                     "Should change uniqueness to false for " + chosenValue.longValue() + "given that it already" +
                             "is on the value list",
@@ -219,7 +222,7 @@ public class UniqueIdUDAFTest {
         };
     }
 
-    private Supplier<List<Long>> randomValueLists(final Random randomizer) {
-        return () -> randomizer.longs().limit(randomizer.nextInt(19) + 1).boxed().collect(Collectors.toList());
+    private Supplier<Set<Long>> randomValueSets(final Random randomizer) {
+        return () -> randomizer.longs().limit(randomizer.nextInt(19) + 1).boxed().collect(Collectors.toSet());
     }
 }
