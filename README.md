@@ -94,7 +94,9 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
     Write a query that checks the total number of employees in each department of each country within the company.
     
     The results should look like:
-    
+   
+   
+    | H1            | H2                    |H3|
     |---------------|-----------------------|--|
     |Brazil		    |Accounting			    |26|
     |Brazil		    |Data					|25|
