@@ -39,10 +39,10 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
    In Hue, write a query, that will use the EMPLOYEES table to check for 10 youngest employees in the whole company and
    display the results in Hue query editor.
    
-2. Take the CSV data from the "src/resoures/employee_details" folder and use Hue to place it in a chosen directory on HDFS,
+2. Take the CSV data from the "src/resoures/employmentDetails" folder and use Hue to place it in a chosen directory on HDFS,
    so that data is partitioned physically by "country" and "department" columns.     
    
-   Create an external table that will point to this data called "EMPLOYEE_DETAILS".
+   Create an external table that will point to this data called "EMPLOYMENT_DETAILS".
    
    Write a HQL query that for each country and each department, will calculate the number of employees working for it as
    "employee_count".

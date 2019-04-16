@@ -1,0 +1,110 @@
+docker run --name=cloudera --hostname=quickstart.cloudera --privileged=true -t -i --memory="8g" -p 8888:8888 -p 18080:18080 -p 18081:18081 -p 7078:7078 -p 7077:7077 -p 8032:8032 -p 8088:8088 -p 8042:8042 -p 8020:8020 -p 8022:8022 -p 50470:50470 -p 50070:50070 -p 50010:50010 -p 50020:50020 -p 50075:50075 -p 50090:50090 -p 50495:50495 -p 9092:9092 -p 2181:2181 -p 7180:7180 -p 19888:19888 -p 9083:9083 -v ~/Documents/sql-on-bigdata:/gft-host cloudera/quickstart:latest /usr/bin/docker-quickstart
+
+Napisać skrypt do naprawiania:
+sudo service hadoop-hdfs-namenode status
+sudo service hadoop-hdfs-namenode restart
+sudo service hive-metastore status
+sudo service hive-metastore restart
+
+NA POCZĄTEK:
+
+cd gft-host/gft-host
+
+ZADANIE 1:
+
+	Wrzucenie danych do HDFS: dfs -put employees /user/cloudera;
+
+	Tworzenie tabeli: 		CREATE TABLE EMPLOYEES(id BIGINT, name STRING, surname STRING, age INT) CLUSTERED BY(age) INTO 16 BUCKETS STORED AS AVRO;
+
+	Ładowanie danych: 		LOAD DATA INPATH '/user/cloudera/employees/employees.avro' INTO TABLE employees;
+
+	Query: 					SELECT * FROM employees ORDER BY age LIMIT 10;
+
+	Results:
+
+	9142663307278240080	Olivia	Brown	20
+	4642405334998336361	Olivia	Smith	20
+	-1903247989832727208	Liam		Miller	20
+	-543441861784811070	Jacob	Brown	20
+	4846510212249437988	Amelia	Davis	20
+	-9210373312920532954	James	Williams	20
+	-7800748830028249231	Mia		Miller	20
+	467667153472408797	Ava		Smith	20
+	-6147910367583713608	Olivia	Davis	20
+	-4891817733283756829	Liam		Smith	20
+
+
+ZADANIE 2:
+
+	Wrzucenie danych do HDFS: dfs -put employmentDetails /user/cloudera;
+
+	Tworzenie tabeli: CREATE EXTERNAL TABLE EMPLOYMENT_DETAILS(employeeId BIGINT, experience INT) PARTITIONED BY(country STRING, department STRING)
+ 					 ROW FORMAT DELIMITED
+					 FIELDS TERMINATED BY ','
+					 LOCATION '/user/cloudera/employmentDetails';
+
+	Wczytanie partycjonowania: MSCK REPAIR TABLE EMPLOYMENT_DETAILS;
+
+	Query: SELECT country, department, COUNT(*) AS employee_count FROM EMPLOYMENT_DETAILS GROUP BY country, department;
+
+	Results:
+
+	Brazil			Accounting			26
+	Brazil			Data					25
+	Brazil			HR					21
+	Brazil			IT					19
+	Brazil			Management			28
+	Brazil			Project Development	26
+	Brazil			Recruitment			27
+	France			Accounting			30
+	France			Data					24
+	France			HR					19
+	France			IT					26
+	France			Management			20
+	France			Project Development	10
+	France			Recruitment			20
+	Malaysia			Accounting			25
+	Malaysia			Data					25
+	Malaysia			HR					26
+	Malaysia			IT					28
+	Malaysia			Management			29
+	Malaysia			Project Development	27
+	Malaysia			Recruitment			23
+	Poland			Accounting			19
+	Poland			Data					19
+	Poland			HR					21
+	Poland			IT					20
+	Poland			Management			21
+	Poland			Project Development	24
+	Poland			Recruitment			32
+	USA				Accounting			28
+	USA				Data					20
+	USA				HR					24
+	USA				IT					26
+	USA				Management			22
+	USA				Project Development	20
+	USA				Recruitment			17
+	United Kingdom	Accounting			22
+	United Kingdom	Data					28
+	United Kingdom	HR					29
+	United Kingdom	IT					26
+	United Kingdom	Management			25
+	United Kingdom	Project Development	26
+	United Kingdom	Recruitment			27
+
+ZADANIE 3:
+
+Wrzucenie danych: dfs -put salaryData /user/cloudera;
+
+Tworzenie tabeli: CREATE EXTERNAL TABLE SALARY_DATA(employeeId BIGINT, salary DOUBLE) STORED AS PARQUET LOCATION '/user/cloudera/salaryData' TBLPROPERTIES('parquet.compression'='snappy');
+
+
+ZADANIE 4: UDF
+
+ZADANIE 5: UDAF
+
+ZADANIE 6:
+
+Query 1: CREATE TEMPORARY TABLE MAX_SALARIES AS SELECT MAX(salary), country, department FROM EMPLOYMENT_DETAILS AS ed JOIN SALARY_DATA AS sd ON ed.employeeId = sd.employeeId GROUP BY country, department;
+
+CREATE TEMPORARY TABLE MAX_EXPERIENCE AS SELECT MAX(experience), country, department FROM EMPLOYMENT_DETAILS GROUP BY country, department;
