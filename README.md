@@ -54,18 +54,20 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
    Write a HQL query, that lists the id, name, surname and age of the 10 youngest employees in the company.
    
    The result should be:
-   
-   |------------------------|-------|-----------|--|
-   |9142663307278240080	    |Olivia	|Brown	    |20|
-   |4642405334998336361	    |Olivia	|Smith	    |20|
-   |-1903247989832727208	|Liam	|Miller	    |20|
-   |-543441861784811070	    |Jacob	|Brown	    |20|
-   |4846510212249437988	    |Amelia	|Davis	    |20|
-   |-9210373312920532954	|James	|Williams	|20|
-   |-7800748830028249231	|Mia	|Miller	    |20|
-   |467667153472408797	    |Ava	|Smith	    |20|
-   |-6147910367583713608	|Olivia	|Davis	    |20|
-   |-4891817733283756829	|Liam	|Smith	    |20|
+
+
+   |id                      |name   |surname    |age|   
+   |------------------------|-------|-----------|---|
+   |9142663307278240080	    |Olivia	|Brown	    |20 |
+   |4642405334998336361	    |Olivia	|Smith	    |20 |
+   |-1903247989832727208	|Liam	|Miller	    |20 |
+   |-543441861784811070	    |Jacob	|Brown	    |20 |
+   |4846510212249437988	    |Amelia	|Davis	    |20 |
+   |-9210373312920532954	|James	|Williams	|20 |
+   |-7800748830028249231	|Mia	|Miller	    |20 |
+   |467667153472408797	    |Ava	|Smith	    |20 |
+   |-6147910367583713608	|Olivia	|Davis	    |20 |
+   |-4891817733283756829	|Liam	|Smith	    |20 |
    
 2. On data in the "/user/cloudera/employmentDetails" HDFS directory, declare an external table, with the following fields:
 
@@ -96,50 +98,50 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
     The results should look like:
    
    
-    | H1            | H2                    |H3|
-    |---------------|-----------------------|--|
-    |Brazil		    |Accounting			    |26|
-    |Brazil		    |Data					|25|
-    |Brazil		    |HR					    |21|
-    |Brazil		    |IT					    |19|
-    |Brazil		    |Management			    |28|
-    |Brazil		    |Project Development	|26|
-    |Brazil		    |Recruitment			|27|
-    |France		    |Accounting			    |30|
-    |France		    |Data					|24|
-    |France		    |HR					    |19|
-    |France		    |IT					    |26|
-    |France		    |Management			    |20|
-    |France		    |Project Development	|10|
-    |France		    |Recruitment			|20|
-    |Malaysia	    |Accounting			    |25|
-    |Malaysia	    |Data					|25|
-    |Malaysia	    |HR					    |26|
-    |Malaysia	    |IT					    |28|
-    |Malaysia	    |Management			    |29|
-    |Malaysia	    |Project Development	|27|
-    |Malaysia	    |Recruitment			|23|
-    |Poland		    |Accounting			    |19|
-    |Poland		    |Data					|19|
-    |Poland		    |HR					    |21|
-    |Poland		    |IT					    |20|
-    |Poland		    |Management			    |21|
-    |Poland		    |Project Development	|24|
-    |Poland		    |Recruitment			|32|
-    |USA		    |Accounting			    |28|
-    |USA		    |Data					|20|
-    |USA		    |HR					    |24|
-    |USA		    |IT					    |26|
-    |USA		    |Management			    |22|
-    |USA		    |Project Development	|20|
-    |USA		    |Recruitment			|17|
-    |United Kingdom |Accounting			    |22|
-    |United Kingdom |Data	                |28|
-    |United Kingdom |HR					    |29|
-    |United Kingdom |IT					    |26|
-    |United Kingdom |Management			    |25|
-    |United Kingdom |Project Development	|26|
-    |United Kingdom |Recruitment			|27|
+    | country       | department            | employee_count |
+    |---------------|-----------------------|----------------|
+    |Brazil		    |Accounting			    |26              |
+    |Brazil		    |Data					|25              |
+    |Brazil		    |HR					    |21              |
+    |Brazil		    |IT					    |19              |
+    |Brazil		    |Management			    |28              |
+    |Brazil		    |Project Development	|26              |
+    |Brazil		    |Recruitment			|27              |
+    |France		    |Accounting			    |30              |
+    |France		    |Data					|24              |
+    |France		    |HR					    |19              |
+    |France		    |IT					    |26              |
+    |France		    |Management			    |20              |
+    |France		    |Project Development	|10              |
+    |France		    |Recruitment			|20              |
+    |Malaysia	    |Accounting			    |25              |
+    |Malaysia	    |Data					|25              |
+    |Malaysia	    |HR					    |26              |
+    |Malaysia	    |IT					    |28              |
+    |Malaysia	    |Management			    |29              |
+    |Malaysia	    |Project Development	|27              |
+    |Malaysia	    |Recruitment			|23              |
+    |Poland		    |Accounting			    |19              |
+    |Poland		    |Data					|19              |
+    |Poland		    |HR					    |21              |
+    |Poland		    |IT					    |20              |
+    |Poland		    |Management			    |21              |
+    |Poland		    |Project Development	|24              |
+    |Poland		    |Recruitment			|32              |
+    |USA		    |Accounting			    |28              |
+    |USA		    |Data					|20              |
+    |USA		    |HR					    |24              |
+    |USA		    |IT					    |26              |
+    |USA		    |Management			    |22              |
+    |USA		    |Project Development	|20              |
+    |USA		    |Recruitment			|17              |
+    |United Kingdom |Accounting			    |22              |
+    |United Kingdom |Data	                |28              |
+    |United Kingdom |HR					    |29              |
+    |United Kingdom |IT					    |26              |
+    |United Kingdom |Management			    |25              |
+    |United Kingdom |Project Development	|26              |
+    |United Kingdom |Recruitment			|27              |
                                                 
 3. Declare an external table named "SALARY_DATA" on Parquet data inside the "/user/cloudera/salaryData" HDFS directory
    with fields and types as stored in the Parquet file (employeeId BIGINT and salary DOUBLE)
@@ -151,7 +153,9 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
    Write a query that would list the top 10 salaries overall to check the correctness of your implementation.
    
    The results should be:
-
+      
+      
+      |salary             |
       |-------------------|   
       |1861.0529092539268 |
       |1908.5762120457389 |
@@ -187,19 +191,21 @@ make sure we know how to process massive datasets on Hadoop platforms using the 
     
     The results should look like this:
     
-    |-----------|-----------|-------------------|---|---------------|-------------------|
-    |Emma	    |Davis	    |6862.106202127102	|53	|France	        |Accounting         |
-    |Isabella	|Wilson	    |7572.2007375490275	|54	|Malaysia	    |Accounting         |
-    |James	    |Wilson	    |6751.775666458922	|53	|Malaysia	    |HR                 |
-    |Sophia	    |Miller	    |9839.362719565705	|55	|Malaysia	    |Management         |
-    |Olivia	    |Johnson	|8608.655648285097	|54	|Poland	        |Data               |
-    |William    |Garcia	    |6655.366232692259	|51	|Poland	        |HR                 |
-    |Jacob	    |Miller	    |9344.318531502442	|53	|Poland	        |Management         |
-    |Alexander	|Jones	    |8250.257610419218	|55	|Poland	        |Project Development|
-    |Mia	    |Jones	    |9275.645030263893	|55	|USA	        |Management         |
-    |Sophia	    |Williams	|6893.57807046831	|55	|United Kingdom	|HR                 |
-    |Liam	    |Miller	    |7363.438077498668	|54	|United Kingdom	|IT                 |
-    |Jacob	    |Johnson	|8396.740335136059	|55	|United Kingdom	|Project Development|
+    
+    |name       |surname    |salary             |experience |country        |department         |
+    |-----------|-----------|-------------------|-----------|---------------|-------------------|
+    |Emma	    |Davis	    |6862.106202127102	|53	        |France	        |Accounting         |
+    |Isabella	|Wilson	    |7572.2007375490275	|54	        |Malaysia	    |Accounting         |
+    |James	    |Wilson	    |6751.775666458922	|53	        |Malaysia	    |HR                 |
+    |Sophia	    |Miller	    |9839.362719565705	|55	        |Malaysia	    |Management         |
+    |Olivia	    |Johnson	|8608.655648285097	|54	        |Poland	        |Data               |
+    |William    |Garcia	    |6655.366232692259	|51	        |Poland	        |HR                 |
+    |Jacob	    |Miller	    |9344.318531502442	|53	        |Poland	        |Management         |
+    |Alexander	|Jones	    |8250.257610419218	|55	        |Poland	        |Project Development|
+    |Mia	    |Jones	    |9275.645030263893	|55	        |USA	        |Management         |
+    |Sophia	    |Williams	|6893.57807046831	|55	        |United Kingdom	|HR                 |
+    |Liam	    |Miller	    |7363.438077498668	|54	        |United Kingdom	|IT                 |
+    |Jacob	    |Johnson	|8396.740335136059	|55	        |United Kingdom	|Project Development|
     
     NOTE: In this assignment, it is practical to create intermediate, temporary tables, for instance
     storing maximal salaries and years of experience for each country and department
