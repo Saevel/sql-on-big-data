@@ -1,0 +1,5 @@
+CREATE EXTERNAL TABLE EMPLOYMENT_DETAILS(employeeId BIGINT, experience INT) PARTITIONED BY(country STRING, department STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' LOCATION '/user/cloudera/employmentDetails';
+
+MSCK REPAIR TABLE EMPLOYMENT_DETAILS;
+
+SELECT country, department, COUNT(*) AS employee_count FROM EMPLOYMENT_DETAILS GROUP BY country, department;
